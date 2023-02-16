@@ -13,7 +13,7 @@ type Storage interface {
 }
 
 type UserData struct {
-	UserID   int64
+	ChatID   int64
 	UserName string
 }
 
@@ -38,8 +38,8 @@ func (u *UserData) Save(ctx context.Context, db *sql.DB) error {
 	if isID {
 		return nil
 	} else {
-		q := `insert into userData(userID, userName) values(?, ?)`
-		if _, err := db.ExecContext(ctx, q, u.UserID, u.UserName); err != nil {
+		q := `insert into userData(chatID, userName) values(?, ?)`
+		if _, err := db.ExecContext(ctx, q, u.ChatID, u.UserName); err != nil {
 			return fmt.Errorf("can't add user to database: %w", err)
 		}
 	}
@@ -55,10 +55,10 @@ func (t *Tasks) Save(ctx context.Context, db *sql.DB) error {
 }
 
 func (u *UserData) Get(ctx context.Context, db *sql.DB) (bool, []string, error) {
-	q := `select userID from userData where userID=?`
+	q := `select chatID from userData where chatID=?`
 	var resp int
 	var result []string
-	err := db.QueryRowContext(ctx, q, u.UserID).Scan(&resp)
+	err := db.QueryRowContext(ctx, q, u.ChatID).Scan(&resp)
 	result = append(result, strconv.Itoa(resp)) // =1 row
 	if err == sql.ErrNoRows {
 		return false, result, nil
