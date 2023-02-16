@@ -46,7 +46,7 @@ func main() {
 
 	for update := range updates {
 		if update.Message != nil {
-			uTable.UserID = update.Message.Chat.ID
+			uTable.ChatID = update.Message.Chat.ID
 			uTable.UserName = update.Message.Chat.UserName
 			tTable.TaskID = update.Message.Chat.ID
 			listener.UserDatabase = uTable
